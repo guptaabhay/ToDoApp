@@ -63,9 +63,8 @@ public class MainActivity extends AppCompatActivity {
                 public boolean onItemLongClick(AdapterView<?> adapter, View item, int pos, long id) {
                     ToDoItem toDoItem = items.get(pos);
                     databaseHelper.DeleteItem(toDoItem);
-
-                    items.remove(pos);
                     itemsAdapter.notifyDataSetChanged();
+                    items.remove(pos);
                     //writeItems();
                     return true;
                 }
@@ -93,9 +92,14 @@ public class MainActivity extends AppCompatActivity {
         String itemText = etNewItem.getText().toString();
 
         ToDoItem toDoItem = new ToDoItem(itemText);
-        itemsAdapter.add(toDoItem);
+
         databaseHelper.AddToDoItem(toDoItem);
         etNewItem.setText("");
+
+        items.clear();
+        items.addAll(databaseHelper.getAllToDoItems());
+
+        itemsAdapter.notifyDataSetChanged();
         //writeItems();
     }
 

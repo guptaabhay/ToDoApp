@@ -35,7 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String CREATE_TODO_TABLE = "CREATE TABLE " + TABLE_TODO +
             "(" +
             KEY_TODO_ID + " INTEGER PRIMARY KEY," + // Define a primary key
-            KEY_TODO_TODO_ITEM + " TEXT," +
+            KEY_TODO_TODO_ITEM + " TEXT" +
             ")";
 
         db.execSQL(CREATE_TODO_TABLE);
@@ -53,7 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    void AddToDoItem(ToDoItem toDoItem) {
+    public void AddToDoItem(ToDoItem toDoItem) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
@@ -84,20 +84,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return items;
     }
 
-    public int UpdateItem(ToDoItem toDoItem) {
+    public void UpdateItem(ToDoItem toDoItem) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         cv.put(KEY_TODO_ID, toDoItem.getID());
         cv.put(KEY_TODO_TODO_ITEM, toDoItem.getItem());
 
-        return db.update(TABLE_TODO, cv, KEY_TODO_ID + "=?", new String[]{toDoItem.getID().toString()});
-
+        db.update(TABLE_TODO, cv, KEY_TODO_ID + "=" + toDoItem.getID().toString(), null);
+        db.close();
     }
 
     public void DeleteItem(ToDoItem toDoItem) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_TODO, KEY_TODO_ID + "=?", new String[]{toDoItem.getID().toString()});
+        db.delete(TABLE_TODO, KEY_TODO_ID + "=" + toDoItem.getID().toString(), null);
         db.close();
     }
 }
